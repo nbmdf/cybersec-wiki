@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="CyberSec Wiki shield logo">
+  <defs><linearGradient id="g" x1="5" y1="4" x2="45" y2="45"><stop stop-color="#67E8F9"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs>
+  <path d="M24 3.5 42 10v11.4c0 11.5-6.8 19.3-18 23.1C12.8 40.7 6 32.9 6 21.4V10L24 3.5Z" fill="url(#g)" fill-opacity=".16" stroke="url(#g)" stroke-width="2.5"/>
+  <path d="m15 23 6.4 6.4L33.5 17" stroke="#B7F4FF" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

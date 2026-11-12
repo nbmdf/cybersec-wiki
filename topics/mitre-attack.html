@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0B1220"><meta name="description" content="理解資安人員描述攻擊行為的共同語言，從戰術（Tactic）、技術（Technique）到實際程序（Procedure）。"><title>認識 MITRE ATT&amp;CK｜CyberSec Wiki</title><link rel="icon" href="../assets/images/logo-shield.svg" type="image/svg+xml"><link rel="stylesheet" href="../css/style.css"><script src="../js/main.js" defer></script></head>
+<body><a class="skip-link" href="#main-content">跳到主要內容</a>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="../index.html" aria-label="CyberSec Wiki 首頁"><img src="../assets/images/logo-shield.svg" alt="" width="39" height="39"><span>CyberSec <span>Wiki</span></span></a>
+<nav class="main-nav" aria-label="主要導覽"><a href="../index.html">首頁</a><a href="../index.html#categories">知識分類</a><a href="../index.html#topics">文章總覽</a><a href="../index.html#about">關於本站</a><span class="nav-tag">KNOWLEDGE BASE</span></nav>
+</div></header>
+<main id="main-content">
+<section class="article-hero"><div class="container"><nav class="breadcrumbs" aria-label="麵包屑導覽"><a href="../index.html">首頁</a><span aria-hidden="true">/</span><a href="../index.html#topics">知識文章</a><span aria-hidden="true">/</span><span aria-current="page">認識 MITRE ATT&amp;CK</span></nav><div class="article-header"><p class="eyebrow">CYBERSEC WIKI / LEARNING NOTES</p><h1>認識 MITRE ATT&amp;CK</h1><p class="article-deck">理解資安人員描述攻擊行為的共同語言，從戰術（Tactic）、技術（Technique）到實際程序（Procedure）。</p><div class="article-tags"><span class="tag accent">THREAT INTELLIGENCE</span><span class="tag">入門</span><span class="tag">約 7 分鐘</span><span class="tag">最後更新 2026-11-13</span></div></div></div></section>
+<div class="article-main"><div class="container article-layout"><aside class="article-toc" aria-label="文章目錄"><h2>ON THIS PAGE / 文章目錄</h2><nav aria-label="文章章節"><ol class="toc-list"><li><a href="#introduction">01　概念介紹</a></li>
+<li><a href="#core-concepts">02　核心知識</a></li>
+<li><a href="#examples">03　實際案例</a></li>
+<li><a href="#defense">04　防禦與建議</a></li>
+<li><a href="#summary">05　重點整理</a></li>
+<li><a href="#references">06　參考資料</a></li></ol></nav><div class="toc-end"><a href="../index.html#topics">← 返回文章總覽</a></div></aside><article class="article-content">
+<section id="introduction" aria-labelledby="heading-introduction"><h2 id="heading-introduction">01　概念介紹</h2>
+<p><strong>MITRE ATT&CK</strong> 是一個以真實世界觀察為基礎，整理攻擊者戰術與技術的公開知識庫。ATT&CK 的內容可以協助安全團隊描述威脅行為、規劃偵測策略與溝通事件分析結果。</p><p>它不是「自動阻擋所有攻擊」的軟體，而是一套<strong>共同的描述架構</strong>：讓不同團隊談到攻擊行為時，能指向相同的名稱、編號與定義。</p><div class="info-box"><strong>閱讀定位</strong>本頁介紹的是 <strong>Enterprise ATT&CK</strong> 基礎概念。ATT&CK 有不同矩陣與版本，條目會持續更新，請以官方網站即時內容為準。</div>
+</section>
+<section id="core-concepts" aria-labelledby="heading-core-concepts"><h2 id="heading-core-concepts">02　核心知識</h2>
+<h3>ATT&CK 的四個基本詞彙</h3><div class="glossary-grid"><div class="glossary-item"><strong>Tactic · 戰術</strong><p>攻擊者想達成的「目的／為什麼」，如 Initial Access（初始存取）。</p></div><div class="glossary-item"><strong>Technique · 技術</strong><p>為了達成目的所使用的「方式／怎麼做」，如 Phishing（網路釣魚，T1566）。</p></div><div class="glossary-item"><strong>Sub-technique · 子技術</strong><p>將技術拆得更細，幫助更精確分類與描述。</p></div><div class="glossary-item"><strong>Procedure · 程序</strong><p>特定行動者在具體事件中如何實施某種技術的描述。</p></div></div><h3>Enterprise 戰術概覽</h3><p>以下是查閱時 MITRE 官方 Enterprise tactics 頁面列出的 15 個戰術名稱。ATT&CK 可能更新分類與內容。</p><div class="tactic-list"><span>Reconnaissance</span><span>Resource Development</span><span>Initial Access</span><span>Execution</span><span>Persistence</span><span>Privilege Escalation</span><span>Stealth</span><span>Defense Impairment</span><span>Credential Access</span><span>Discovery</span><span>Lateral Movement</span><span>Collection</span><span>Command and Control</span><span>Exfiltration</span><span>Impact</span></div><p>例如，<strong>Initial Access</strong> 是獲得初始進入點的目的，<strong>Credential Access</strong> 是取得帳號或密碼等憑證的目的；這些都是戰術，不是特定軟體名稱。</p>
+</section>
+<section id="examples" aria-labelledby="heading-examples"><h2 id="heading-examples">03　實際案例</h2>
+<h3>示意：如何將觀察對應到技術？</h3><p>假設防禦團隊調查到可疑電子郵件引導使用者開啟附件，並發現有未知的指令直譯器執行行為。分析人員可能分別考慮下列 ATT&CK 技術：</p><ul><li><a href="https://attack.mitre.org/techniques/T1566/" target="_blank" rel="noopener noreferrer"><strong>T1566 — Phishing</strong></a>：利用釣魚訊息嘗試取得初始存取。</li><li><a href="https://attack.mitre.org/techniques/T1059/" target="_blank" rel="noopener noreferrer"><strong>T1059 — Command and Scripting Interpreter</strong></a>：利用命令與腳本直譯器執行操作。</li></ul><p>這個示意說明 ATT&CK 可以協助整理「看見的行為」，但不能只因觀察到一個訊號就斷定一定遭到攻擊。仍需要日誌、時間序列及其他證據交叉確認。</p><div class="info-box"><strong>不要把 ATT&CK 當成固定的攻擊流程圖</strong>不同技術可能在不同階段出現，同一個技術也可能對應多個戰術；矩陣不表示攻擊必然從左到右依序發生。</div>
+</section>
+<section id="defense" aria-labelledby="heading-defense"><h2 id="heading-defense">04　防禦與建議</h2>
+<ul><li><strong>威脅情資整理：</strong>將報告中描述的具體行為映射到 ATT&CK 技術編號。</li><li><strong>偵測工程：</strong>用戰術與技術盤點事件紀錄、偵測能力與盲點。</li><li><strong>事件應變：</strong>在調查報告中使用一致的攻擊行為名稱，減少溝通歧義。</li><li><strong>查證映射結果：</strong>保留支持某項技術的實際證據，不只依靠關鍵字比對。</li><li><strong>追蹤框架更新：</strong>版本變動時重新確認技術編號、名稱與分類。</li></ul>
+</section>
+<section id="summary" aria-labelledby="heading-summary"><h2 id="heading-summary">05　重點整理</h2>
+<ul><li><strong>Tactic</strong> 是目的；<strong>Technique</strong> 是方法；<strong>Procedure</strong> 是特定案例的做法。</li><li>MITRE ATT&CK 用於描述和分析攻擊行為，而非直接提供防火牆或防毒功能。</li><li>ATT&CK 技術映射應由證據支持，避免過度推論。</li><li>閱讀威脅情資報告時，可以先找出行為，再對照官方技術條目。</li></ul>
+</section>
+<section id="references" aria-labelledby="heading-references"><h2 id="heading-references">06　參考資料</h2>
+<ol class="reference-list"><li><a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&CK — 官方網站 ↗</a><small>MITRE，框架定義、矩陣與知識庫。</small></li><li><a href="https://attack.mitre.org/tactics/enterprise/" target="_blank" rel="noopener noreferrer">Enterprise Tactics — MITRE ↗</a><small>MITRE，Enterprise 戰術清單；查閱日期：2026-11-13。</small></li><li><a href="https://attack.mitre.org/techniques/T1566/" target="_blank" rel="noopener noreferrer">T1566 Phishing — MITRE ↗</a><small>MITRE，攻擊技術條目及描述。</small></li><li><a href="https://attack.mitre.org/techniques/T1059/" target="_blank" rel="noopener noreferrer">T1059 Command and Scripting Interpreter — MITRE ↗</a><small>MITRE，攻擊技術條目及描述。</small></li></ol>
+</section>
+<nav class="article-pagination" aria-label="文章切換"><a href="owasp-top10.html"><span aria-hidden="true">←</span><span>上一篇<br><strong>OWASP Top 10</strong></span></a><a href="sql-injection.html"><span>下一篇<br><strong>SQL Injection</strong></span><span aria-hidden="true">→</span></a></nav>
+</article></div></div>
+</main><footer class="site-footer"><div class="container"><div class="footer-main"><div><a class="brand" href="../index.html"><img src="../assets/images/logo-shield.svg" width="39" height="39" alt=""><span>CyberSec <span>Wiki</span></span></a><p class="footer-description">將複雜的網路安全概念整理為清楚、可延伸的繁體中文學習資源。內容僅供教育與防禦學習。</p></div><nav class="footer-nav" aria-label="頁尾導覽"><a href="../index.html">首頁</a><a href="../index.html#categories">知識分類</a><a href="../index.html#topics">文章總覽</a><a href="https://owasp.org/" target="_blank" rel="noopener noreferrer">OWASP ↗</a><a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&CK ↗</a></nav></div><div class="footer-bottom"><span>© 2026 CyberSec Wiki · Built for learning.</span><span>Consistency &gt; Complexity</span></div></div></footer>
+</body></html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0B1220"><meta name="description" content="從「輸入資料與 SQL 指令混在一起」理解注入風險，學會參數化查詢和防禦性資料庫設計。"><title>SQL Injection 入門｜CyberSec Wiki</title><link rel="icon" href="../assets/images/logo-shield.svg" type="image/svg+xml"><link rel="stylesheet" href="../css/style.css"><script src="../js/main.js" defer></script></head>
+<body><a class="skip-link" href="#main-content">跳到主要內容</a>
+<header class="site-header"><div class="container header-inner">
+<a class="brand" href="../index.html" aria-label="CyberSec Wiki 首頁"><img src="../assets/images/logo-shield.svg" alt="" width="39" height="39"><span>CyberSec <span>Wiki</span></span></a>
+<nav class="main-nav" aria-label="主要導覽"><a href="../index.html">首頁</a><a href="../index.html#categories">知識分類</a><a href="../index.html#topics">文章總覽</a><a href="../index.html#about">關於本站</a><span class="nav-tag">KNOWLEDGE BASE</span></nav>
+</div></header>
+<main id="main-content">
+<section class="article-hero"><div class="container"><nav class="breadcrumbs" aria-label="麵包屑導覽"><a href="../index.html">首頁</a><span aria-hidden="true">/</span><a href="../index.html#topics">知識文章</a><span aria-hidden="true">/</span><span aria-current="page">SQL Injection 入門</span></nav><div class="article-header"><p class="eyebrow">CYBERSEC WIKI / LEARNING NOTES</p><h1>SQL Injection 入門</h1><p class="article-deck">從「輸入資料與 SQL 指令混在一起」理解注入風險，學會參數化查詢和防禦性資料庫設計。</p><div class="article-tags"><span class="tag accent">WEB SECURITY</span><span class="tag">入門</span><span class="tag">約 6 分鐘</span><span class="tag">最後更新 2026-11-13</span></div></div></div></section>
+<div class="article-main"><div class="container article-layout"><aside class="article-toc" aria-label="文章目錄"><h2>ON THIS PAGE / 文章目錄</h2><nav aria-label="文章章節"><ol class="toc-list"><li><a href="#introduction">01　概念介紹</a></li>
+<li><a href="#core-concepts">02　核心知識</a></li>
+<li><a href="#examples">03　實際案例</a></li>
+<li><a href="#defense">04　防禦與建議</a></li>
+<li><a href="#summary">05　重點整理</a></li>
+<li><a href="#references">06　參考資料</a></li></ol></nav><div class="toc-end"><a href="../index.html#topics">← 返回文章總覽</a></div></aside><article class="article-content">
+<section id="introduction" aria-labelledby="heading-introduction"><h2 id="heading-introduction">01　概念介紹</h2>
+<p><strong>SQL Injection（SQL 注入，簡稱 SQLi）</strong> 是一種發生在應用程式與資料庫交互時的安全弱點。問題通常出在開發者把使用者提供的資料直接拼接進 SQL 指令，使「原本應該只是資料」的內容有機會改變查詢的結構。</p><p>SQL Injection 屬於 <strong>OWASP Top 10:2025 的 A05:2025 — Injection</strong> 類別。影響可能包括非預期的資料查詢、資料修改或其他未授權操作，具體影響取決於系統與資料庫帳號權限。</p><div class="info-box"><strong>本文範圍</strong>以下以虛構的會員查詢功能說明風險，重點在於防禦觀念與安全寫法，不涉及真實系統測試。</div>
+</section>
+<section id="core-concepts" aria-labelledby="heading-core-concepts"><h2 id="heading-core-concepts">02　核心知識</h2>
+<h3>問題根源：指令和資料沒有分開</h3><p>應用程式會使用 SQL（Structured Query Language，結構化查詢語言）與資料庫溝通。當程式把外部字串直接串接成 SQL 指令時，資料庫無法可靠分辨哪些部分是程式想執行的查詢結構、哪些部分只是使用者輸入的資料。</p><div class="warning-box info-box"><strong>不安全的程式設計模式（示意）</strong>直接把使用者輸入組合成 SQL 字串，會使查詢結構受到非預期輸入影響。</div><pre><code>// 示意：請避免這種字串拼接方式
+const query = "SELECT * FROM members WHERE name = '" + userName + "'";</code></pre><h3>核心修正方法：Parameterized Query</h3><p><strong>參數化查詢（Parameterized Query）</strong> 會先定義固定的 SQL 結構，再把使用者輸入的值透過資料庫驅動程式綁定進去，避免它被視為 SQL 語法的一部分。</p>
+</section>
+<section id="examples" aria-labelledby="heading-examples"><h2 id="heading-examples">03　實際案例</h2>
+<h3>安全寫法：Python + SQLite</h3><p>以下範例是 Python 標準程式庫 <code>sqlite3</code> 的概念示範。問號 <code>?</code> 是參數位置，<code>(user_name,)</code> 表示要傳入的參數值。</p><pre><code>import sqlite3
+
+connection = sqlite3.connect("example.db")
+cursor = connection.cursor()
+
+user_name = "alice"  # 假設來自表單的輸入值
+cursor.execute(
+    "SELECT id FROM members WHERE name = ?",
+    (user_name,)
+)
+rows = cursor.fetchall()
+connection.close()</code></pre><p>這個示範假設資料庫已存在 <code>members</code> 表格，並非整套可直接執行的網站。重點是使用參數綁定，而不是手動替每個字元加上跳脫符號。</p><div class="info-box"><strong>參數化 ≠ 授權驗證</strong>即使 SQL 本身安全，應用程式仍需要另外檢查「這位使用者是否有權限讀取這筆資料」。</div>
+</section>
+<section id="defense" aria-labelledby="heading-defense"><h2 id="heading-defense">04　防禦與建議</h2>
+<ul><li><strong>優先使用參數化查詢：</strong>避免直接串接不可信任輸入與 SQL 語句。</li><li><strong>限制動態識別字：</strong>資料表名稱、欄位名稱等不能當成一般資料值綁定，應由程式使用固定的允許清單（allow-list）選擇。</li><li><strong>落實最小權限：</strong>資料庫帳號只提供業務必要的權限，降低漏洞發生後的影響。</li><li><strong>輸入驗證是輔助：</strong>檢查格式、長度可以改善資料品質，但不能取代參數化查詢。</li><li><strong>定期進行程式碼審查：</strong>關注 ORM、儲存程序和動態查詢中是否有字串拼接。</li></ul><p>手動跳脫輸入通常容易出錯，不應當成主要防禦措施。</p>
+</section>
+<section id="summary" aria-labelledby="heading-summary"><h2 id="heading-summary">05　重點整理</h2>
+<ul><li>SQL Injection 的根本問題，是把<strong>不可信資料當成 SQL 結構</strong>的一部分。</li><li><strong>參數化查詢</strong>是處理動態資料值的主要防禦方式。</li><li>對資料庫物件名稱等動態結構要使用固定允許清單。</li><li>仍須落實授權檢查、最小權限及測試，才能形成多層防護。</li></ul>
+</section>
+<section id="references" aria-labelledby="heading-references"><h2 id="heading-references">06　參考資料</h2>
+<ol class="reference-list"><li><a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP SQL Injection Prevention Cheat Sheet ↗</a><small>OWASP Cheat Sheet Series，參數化查詢、允許清單與權限建議。</small></li><li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP Query Parameterization Cheat Sheet ↗</a><small>OWASP Cheat Sheet Series，不同程式語言的參數化方法。</small></li><li><a href="https://top10.owasp.org/2025/" target="_blank" rel="noopener noreferrer">OWASP Top 10:2025 ↗</a><small>OWASP，Injection 類別定位。</small></li></ol>
+</section>
+<nav class="article-pagination" aria-label="文章切換"><a href="mitre-attack.html"><span aria-hidden="true">←</span><span>上一篇<br><strong>MITRE ATT&amp;CK</strong></span></a><a href="../index.html#topics"><span>繼續探索<br><strong>更多資安知識</strong></span><span aria-hidden="true">→</span></a></nav>
+</article></div></div>
+</main><footer class="site-footer"><div class="container"><div class="footer-main"><div><a class="brand" href="../index.html"><img src="../assets/images/logo-shield.svg" width="39" height="39" alt=""><span>CyberSec <span>Wiki</span></span></a><p class="footer-description">將複雜的網路安全概念整理為清楚、可延伸的繁體中文學習資源。內容僅供教育與防禦學習。</p></div><nav class="footer-nav" aria-label="頁尾導覽"><a href="../index.html">首頁</a><a href="../index.html#categories">知識分類</a><a href="../index.html#topics">文章總覽</a><a href="https://owasp.org/" target="_blank" rel="noopener noreferrer">OWASP ↗</a><a href="https://attack.mitre.org/" target="_blank" rel="noopener noreferrer">MITRE ATT&CK ↗</a></nav></div><div class="footer-bottom"><span>© 2026 CyberSec Wiki · Built for learning.</span><span>Consistency &gt; Complexity</span></div></div></footer>
+</body></html>
